@@ -1,0 +1,68 @@
+on join:
+	send "", "&8▀▄▀▄▀▄  &a&l  ᴘᴀʀᴛʏɢɢ  &8   ▄▀▄▀▄▀", "", "&7 &7 &7 &7 &7 &7 &7 &7 &7 &7Designed by &9Santio71" and "" to player
+	while player is online:
+		set {_name} to {displayname::%player%} ? "%player%"
+		set {_rank} to getRank({_name} parsed as offlineplayer)
+		set {_prefix} to getPrefix({_rank})
+		set {_suffix} to getSuffix({_rank})
+		set {_color} to getRankColor({_rank})
+		set player's display name to colored "%{_prefix}%%{_name}%%{_suffix}%"
+		set player's tab list name to "%colored {_color}%%{_name}%"
+		set tablist header for player to "", "&3&lPartyGG" and ""
+		set tablist footer for player to "" and "&7%getNews()%"
+		wait a tick
+
+on chat:
+	set chat format to "%player's display name%: %message%"
+	set chat format to colored "%player's display name%: %message%" if player has permission "chat.color"
+
+on join:
+	set join message to "&7%player's display name% &7joined."
+
+on quit:
+	set quit message to "&7%player's display name% &7left."
+
+command /rank [<text>] [<text>] [<text>]:
+	permission: rank.set
+	permission message: Unknown command. Type "/help" for help.
+	trigger:
+		if arg-1 is not set:
+			send "&c/rank <player> <rank>"
+			send "&c/rank [prefix|suffix] <rank> <value>"
+			stop
+		else if arg-1 is "prefix" or "suffix":
+			if arg-3 is not set:
+				send "&c/rank %arg-1% <group> <string>"
+				stop
+			set {rankData::%arg-2%::%arg-1%} to colored arg-3
+			send "&3&lRANK &7Successfully set the %arg-1%&7 of &3%arg-2%&7 to &3%arg-3%&7!"
+		else:
+			if arg-2 is not set:
+				send "&c/rank <player> <rank>"
+				stop
+			
+			set {_p} to arg-1 parsed as offlineplayer
+			set {_u} to uuid of {_p}
+			
+			set {rank::%{_u}%} to arg-2
+			set {_color} to getRankColor(arg-2)
+			set {_rank} to capitalized arg-2
+			
+			send "&3&lRANK &7Successfully set the rank of &3%arg-1% &7to &3%arg-2%&7!"
+			send colored "&7Your rank was set to %{_color}%%uncolored {_rank}%&7!" to {_p}
+
+function getNews() :: text:
+	return {partygg::news} ? ("&7PartyGG.minehut.gg")
+
+function getRank(p: offlineplayer) :: text:
+	set {_u} to uuid of {_p}
+	return {rank::%{_u}%} ? ("Default")
+
+function getPrefix(r: text) :: text:
+	return colored {rankData::%{_r}%::prefix} ? ("&7")
+
+function getSuffix(r: text) :: text:
+	return colored {rankData::%{_r}%::suffix} ? ("&7")
+	
+function getRankColor(r: text) :: text:
+	return first 2 characters of getPrefix({_r})
