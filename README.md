@@ -12,7 +12,7 @@ Autominous Minigame Handling in Minehut using Skript
 - [ ] Stats Saving
 - [ ] API
 
-##### Extra
+#### Extra
 
 - [ ] Database Management
 - [ ] Nicknames
