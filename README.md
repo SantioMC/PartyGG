@@ -4,7 +4,7 @@ Autominous Minigame Handling in Minehut using Skript
 
 ## Features
 
-- [ ] Rank Handling
+- [x] Rank Handling
 - [ ] World Protection
 - [ ] Map Rotation
 - [ ] Universal Queue System
