@@ -80,3 +80,17 @@ function getSuffix(r: text) :: text:
 	
 function getRankColor(r: text) :: text:
 	return first 2 characters of getPrefix({_r})
+	
+function getWeight(p: player) :: number:
+	set {_rank} to getRank({_p}) # get the player's rank
+
+	if {_rank} contains "Default":
+		return 1 # lowest tier
+	else if {_rank} contains "Build":
+		return 2
+	else if {_rank} contains "Staff":
+		return 3
+	else if {_rank} contains "Admin":
+		return 4
+	else if {_rank} contains "Owner":
+		return 5
