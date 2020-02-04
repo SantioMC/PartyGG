@@ -1,0 +1,32 @@
+on entity block change:
+	cancel event
+	
+on break:
+	if {ingame::*} contains player:
+		if {gameData::%{currentGame}%::allowBreak} is true:
+			stop
+			
+	if player's gamemode is not creative:
+		cancel event
+		
+on place:
+	if {ingame::*} contains player:
+		if {gameData::%{currentGame}%::allowPlace} is true:
+			stop
+			
+	if player's gamemode is not creative:
+		cancel event
+		
+on right click:
+	if clicked block is door or fence gate:
+		stop
+	
+	if player's gamemode is not creative:
+		cancel event
+
+on damage:
+	if {ingame::*} contains attacker and victim:
+		if {gameData::%{currentGame}%::allowPvP} is true:
+			stop
+	
+	cancel event
