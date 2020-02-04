@@ -1,0 +1,70 @@
+# staff should have permission "staff", this could also be changed to whatever you want on line (32)
+# this is used for silent joins (won't be broadcasted to all players)
+#
+# vanishing is tiered like this
+# Owner > Admin > Builder & Mod > Default
+#
+
+function getWeight(p: player) :: number:
+	set {_rank} to getRank({_p}) # get the player's rank
+
+	if {_rank} is "Default":
+		return 1 # lowest tier
+    
+	else if {_rank} is "Mod":
+		return 2
+	
+	else if {_rank} is "Builder":
+		return 2
+
+	else if {_rank} is "Admin":
+		return 3
+
+	else if {_rank} is "Owner":
+		return 4 # highest tier
+
+on join:
+	if {vanish::%player's uuid%} is not set:
+		set {vanish::%player's uuid%} to false
+
+	else: # player joins silently
+		set join message to ""
+		loop all players:
+			if player has permission "staff":
+				send "&3&lSTAFF &3%player% &7joined silently."
+
+		if {vanish::%player's uuid%} is true: # player joins silently
+			set {_sw} to getWeight(player) # get player's rank weight
+
+			loop all players:
+				set {_pw} to getWeight(loop-player)
+
+				if {_sw} is greater than {_pw}: # player's rank > other player's rank
+					hide player from loop-player
+			
+			set {_prefix} to getPrefix(player) # get player's prefix
+
+			send "&3&lVANISH &7You are still invisible to all players below %{_prefix}%&7." to player # super fancy message
+
+command /vanish [<player>]:
+	permission: command.vanish
+	#alias: v (not sure if this is the correct syntax)
+	trigger:
+		if {vanish::%player's uuid%} is true:
+			loop all players:
+				reveal player to loop-player
+
+			send "&3&lVANISH &7You are now visible to all." to player
+
+		else:
+			set {_sw} to getWeight(player) # get player's rank weight
+
+			loop all players:
+				set {_pw} to getWeight(loop-player)
+
+				if {_sw} is greater than {_pw}: # player's rank > other player's rank
+					hide player from loop-player
+			
+			set {_prefix} to getPrefix(player) # get player's prefix
+
+			send "&3&lVANISH &7You are now invisible to all players below %{_prefix}%&7." to player # super fancy message
