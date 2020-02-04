@@ -1,0 +1,21 @@
+#
+# This file is hidden to prevent anyone from knowing how punishments are handled.
+#
+
+command /ban:
+  ...
+
+command /unban:
+  ...
+
+command /kick:
+  ...
+
+command /mute:
+  ...
+
+command /unmute:
+  ...
+
+command /punishments:
+  ...
