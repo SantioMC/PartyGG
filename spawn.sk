@@ -1,0 +1,9 @@
+on join:
+	while player is online:
+		if player's gamemode is not creative:
+			if player's world is "hub":
+				if y-coord of player <= 35:
+					teleport player to spawn of world "hub"
+					play sound "entity.arrow.hit_player" to player
+		
+		wait a tick
