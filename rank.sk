@@ -81,11 +81,11 @@ function getSuffix(r: text) :: text:
 function getRankColor(r: text) :: text:
 	return first 2 characters of getPrefix({_r})
 	
-function getWeight(p: player) :: number:
-	set {_rank} to getRank({_p}) # get the player's rank
+function getWeight(p: offlineplayer) :: integer:
+	set {_rank} to getRank({_p})
 
 	if {_rank} contains "Default":
-		return 1 # lowest tier
+		return 1
 	else if {_rank} contains "Build":
 		return 2
 	else if {_rank} contains "Staff":
