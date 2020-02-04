@@ -23,15 +23,18 @@ on chat:
 on join:
 	if {banned::%uuid of player%} is set:
 		set {_id} to {banned::%uuid of player%}
-		set {_time} to {bans::%{_id}%::time} 
+		set {_time} to {punishments::%{_id}%::time} 
 		set {_diff} to difference between now and {_time}
-		if {_diff} >= {bans::%{_id}%::length}:
+		if {_diff} >= {punishments::%{_id}%::length}:
 			clear {banned::%uuid of player%}
 			set join message to "&7%player's display name% &7joined."
+			send "", "&a&lBAN EXPIRED!", "&7Your ban has expired and you are now able to play!" and ""
 		else:
 			set join message to ""
 			wait a tick
 			kick player due to "%nl%&6&lBAN%nl%&7You are banned for &e%{bans::%{_id}%::reason}%&7!%nl%"
+	else:
+		set join message to "&7%player's display name% &7joined."
 
 on quit:
 	set quit message to "&7%player's display name% &7left."
