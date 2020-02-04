@@ -1,0 +1,24 @@
+function createID() :: integer:
+	while {_final} is not set:
+		set {_id} to random integer from 10000000000 to 999999999999999999
+		if {partygg::ids::*} does not contain {_id}:
+			set {_final} to {_id}
+			return {_final}
+			stop
+		wait a tick
+
+function formatTime(time: text) :: timespan:
+	set {_int} to first (length of {_time} - 1) characters of {_time} parsed as integer
+	set {_val} to last character of {_time}
+	if {_int} is not set:
+		set {_int} to first (length of {_time} - 2) characters of {_time} parsed as integer
+		set {_val} to last 2 characters of {_time}
+	return "10000 days" parsed as timespan if {_int} is not set
+	return "10000 days" parsed as timespan if {_val} does not contain "s" or "m" or "h" or "d" or "y"
+	set {_r} to {_int} if {_val} is "s" or "se"
+	set {_r} to {_int}*60 if {_val} is "m" or "mi"
+	set {_r} to {_int}*60*60 if {_val} is "h" or "hr"
+	set {_r} to {_int}*60*60*24 if {_val} is "d" or "dy"
+	set {_r} to {_int}*60*60*24*30 if {_val} is "mo"
+	set {_r} to {_int}*60*60*24*30*12 if {_val} is "y" or "yr"
+	return "%{_r}% seconds" parsed as timespan
