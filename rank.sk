@@ -6,18 +6,32 @@ on join:
 		set {_prefix} to getPrefix({_rank})
 		set {_suffix} to getSuffix({_rank})
 		set {_color} to getRankColor({_rank})
-		set player's display name to colored "%{_prefix}%%{_name}%%{_suffix}%"
+		set player's display name to colored "%{_prefix}%%{_name}%"
 		set player's tab list name to "%colored {_color}%%{_name}%"
 		set tablist header for player to "", "&3&lPartyGG" and ""
 		set tablist footer for player to "" and "&7%getNews()%"
 		wait a tick
 
 on chat:
-	set chat format to "%player's display name%: %message%"
-	set chat format to colored "%player's display name%: %message%" if player has permission "chat.color"
+	set {_name} to {displayname::%player%} ? "%player%"
+	set {_rank} to getRank({_name} parsed as offlineplayer)
+	set {_color} to first 2 characters of getSuffix({_rank})
+
+	set chat format to "%player's display name%%{_color}%: %message%"
+	set chat format to colored "%player's display name%%{_color}%: %message%" if player has permission "chat.color"
 
 on join:
-	set join message to "&7%player's display name% &7joined."
+	if {banned::%uuid of player%} is set:
+		set {_id} to {banned::%uuid of player%}
+		set {_time} to {bans::%{_id}%::time} 
+		set {_diff} to difference between now and {_time}
+		if {_diff} >= {bans::%{_id}%::length}:
+			clear {banned::%uuid of player%}
+			set join message to "&7%player's display name% &7joined."
+		else:
+			set join message to ""
+			wait a tick
+			kick player due to "%nl%&6&lBAN%nl%&7You are banned for &e%{bans::%{_id}%::reason}%&7!%nl%"
 
 on quit:
 	set quit message to "&7%player's display name% &7left."
